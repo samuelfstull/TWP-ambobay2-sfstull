@@ -4,23 +4,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import javax.print.DocFlavor;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+@SuppressWarnings("WeakerAccess")//to emliminate the warnings that they could be private because I do not want them to be
 public class JsonSearcher {
-    HashMap<String, String> totallist = new HashMap<String, String>();
+    HashMap<String, String> finalValuesHM = new HashMap<String, String>();
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<String> timestamps = new ArrayList<String>();
-    public void JsonSearch(){
+
+
+    public void JsonSearch(){ // pulls data from Json file
         com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
-        JsonArray outputfile = null;// holds the revision
-        ArrayList<String> exitEntries= new ArrayList<String>();//final array with all the revisions in it
+        JsonArray revisionsArray;
+        ArrayList<String> userAndTimeList= new ArrayList<String>();//final array with all the revisions in it
+
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("sample.json") ;
         Reader reader = new InputStreamReader(inputStream);
         JsonElement rootElement = parser.parse(reader);
@@ -28,45 +30,44 @@ public class JsonSearcher {
         JsonObject pages = rootObject.getAsJsonObject("query").getAsJsonObject("pages");
         for(Map.Entry<String,JsonElement> entry : pages.entrySet()) {
             JsonObject entryObject = entry.getValue().getAsJsonObject();
-            outputfile = entryObject.getAsJsonArray("revisions");//gets us to revsions level
-            for (JsonElement listOfRevisions : outputfile){
+            revisionsArray = entryObject.getAsJsonArray("revisions");//gets us to revisions level
+            for (JsonElement listOfRevisions : revisionsArray){
                 for(Map.Entry<String, JsonElement> oneRevision: listOfRevisions.getAsJsonObject().entrySet()) {//gets us a list of all revision information.
-                   String testObject = oneRevision.getValue().getAsString();
-                    exitEntries.add(testObject);
+                   String itemFromRevision = oneRevision.getValue().getAsString();
+                    userAndTimeList.add(itemFromRevision);
                 }
             }
         }
-        ArraySeparator(exitEntries);
+        ArraySeparator(userAndTimeList);
         Hashmapafiy();
-        System.out.println(totallist);
+
 
     }
 
 
-    public void ArraySeparator(ArrayList<String> array){
+    public void ArraySeparator(ArrayList<String> inputArray){//takes the long arraylist of all the values and separates them to names and timestamps
         int counter=0;
-
-        while(counter < array.size()) {
-            if (array.get(counter).equals(""))
+        while(counter < inputArray.size()) {
+            if (inputArray.get(counter).equals(""))
             {
-                array.remove(counter);
+                inputArray.remove(counter);
             }
 
                 if (counter % 2 == 0) {
-                    timestamps.add(array.get(counter));
+                    timestamps.add(inputArray.get(counter));
 
                 } else {
-                    names.add(array.get(counter));
+                    names.add(inputArray.get(counter));
                 }
 
            counter++;
        }
     }//arrayseparator end
 
-    public void Hashmapafiy(){
+    public void Hashmapafiy(){// converts two lists to one hashmap
     int counter= 0;
         while(counter < names.size()){
-            totallist.put(names.get(counter),timestamps.get(counter));
+            finalValuesHM.put(names.get(counter),timestamps.get(counter));
             counter++;
         }
     }

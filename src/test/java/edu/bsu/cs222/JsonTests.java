@@ -3,14 +3,13 @@ package edu.bsu.cs222;
 
 import org.junit.Assert;
 import org.junit.Test;
-import edu.bsu.cs222.JsonSearcher;
 
-public class JsonSearcherTest {
+public class JsonTests {
     @Test
-    public void JsonSearcherTesting(){
+    public void JsonParsingTest(){
        JsonSearcher array= new JsonSearcher();
        array.JsonSearch();
-       Assert.assertEquals(5,array.totallist.size());
+       Assert.assertEquals(5,array.finalValuesHM.size());
 
 
 
