@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class JsonSearcher {
+    private ArrayList<String> names = new ArrayList<String>();
+    private ArrayList<String> timestamps = new ArrayList<String>();
     public JsonArray JsonSearch(){
         com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
         JsonArray outputfile = null;// holds the revision
@@ -34,34 +36,35 @@ public class JsonSearcher {
         }
 
 
-        System.out.println(exitEntries);
-        ArrayList<String> names = ArraySeparator(exitEntries,1);
 
-        ArrayList<String> timestamps = ArraySeparator(exitEntries, 2);
+        ArraySeparator(exitEntries);
+        System.out.println(exitEntries);
+        System.out.println();
         System.out.println(names);
+        System.out.println();
         System.out.println(timestamps);
         return outputfile;
     }
 
 
-    public static ArrayList<String> ArraySeparator(ArrayList<String> array, int whicharray){
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> timestamps = new ArrayList<String>();
-        for (int counter = 0;counter >= array.size(); counter++) {
+    public void ArraySeparator(ArrayList<String> array){
+        int counter=0;
 
-           if (counter % 2==0) {
-               timestamps.add(array.get(counter));
-           }
-           else{
-               names.add(array.get(counter));
-           }
+        while(counter < array.size()) {
+            if (array.get(counter).equals(""))
+            {
+                array.remove(counter);
+            }
+
+                if (counter % 2 == 0) {
+                    timestamps.add(array.get(counter));
+
+                } else {
+                    names.add(array.get(counter));
+                }
+
+           counter++;
        }
-    if (whicharray==1){
-           return names;
-    }
-    else {
-        return timestamps;
-    }
     }
 
 }//main end
