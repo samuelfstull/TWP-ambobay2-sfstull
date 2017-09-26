@@ -10,12 +10,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JsonSearcher {
+    HashMap<String, String> totallist = new HashMap<String, String>();
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<String> timestamps = new ArrayList<String>();
-    public JsonArray JsonSearch(){
+    public void JsonSearch(){
         com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
         JsonArray outputfile = null;// holds the revision
         ArrayList<String> exitEntries= new ArrayList<String>();//final array with all the revisions in it
@@ -34,16 +36,10 @@ public class JsonSearcher {
                 }
             }
         }
-
-
-
         ArraySeparator(exitEntries);
-        System.out.println(exitEntries);
-        System.out.println();
-        System.out.println(names);
-        System.out.println();
-        System.out.println(timestamps);
-        return outputfile;
+        Hashmapafiy();
+        System.out.println(totallist);
+
     }
 
 
@@ -65,6 +61,14 @@ public class JsonSearcher {
 
            counter++;
        }
+    }//arrayseparator end
+
+    public void Hashmapafiy(){
+    int counter= 0;
+        while(counter < names.size()){
+            totallist.put(names.get(counter),timestamps.get(counter));
+            counter++;
+        }
     }
 
 }//main end
